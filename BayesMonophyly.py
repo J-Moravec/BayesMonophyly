@@ -1,5 +1,7 @@
+from __future__ import division
 import sys, re
 import argparse as arg
+
 """This script will perform bayesian monophyly test on output from MrBayes or BEAST."""
 
 def ParseArgs():
@@ -105,10 +107,10 @@ def ParseTreeFile(treefile,species):
  return({"species":translated_taxa,"trees":trees})
 
 def CheckSpeciesEquivalency(list_of_dicts):
- if len(list_of_dicts)=0:
+ if len(list_of_dicts)==0:
   print "INTERNAL ERROR: In CheckSpeciesEquivalency: For some reason, no dictionary of translated_taxa was passed."
   sys.exit()
- elif len(list_of_dicts=1):
+ elif len(list_of_dicts)==1:
   #with only one dict, no checking for equivalence is necessary
   pass
  else:
@@ -126,20 +128,38 @@ def CheckSpeciesEquivalency(list_of_dicts):
      print "ERROR: Number or taxa name differs in file 1 {1} and file {0} {2}! They are probably not equivalent!".format(num+2,str(template),str(matched))
      sys.exit()
 
-def GenerateStringMonophyly(species):
- """Generates string representation of all possible monophyletic trees for given species."""
- pass
+def ete2solution(trees,translated_species):
+ monophyletic_counter=0
+ total_trees=len(trees)
+ import ete2
+ for tree in trees:
+  try:
+   ete2_tree=ete2.Tree(tree+";")
+  except ete2.parser.newick.NewickError:
+   print tree
+  try:
+   if ete2_tree.check_monophyly(values=translated_species,target_attr="name")[0]:
+    monophyletic_counter+1
+  except ValueError:
+   print "INTERNAL ERROR: Species are not in tree. Error in translating?"
+   print translated_species
+   print tree
+   sys.exit()
+ return(monophyletic_counter,total_trees)
+
+def TranslateSpecies(translate_dict,species):
+ reversed_dict={value:key for key,value in translate_dict.iteritems()}
+ translated_species=[str(reversed_dict[item]) for item in species]
+ return(translated_species)
 
 def IterativeGrouping(tree,species):
- """Iteratively takes taxons around first species in species."""
- def LeftIncrease(positions,subtree,tree):
-  """Finds closest unpaired "(" bracket on the left of position and appends to subtree everything from this bracket to the current position."""
-  pass
- def RightIncrease(positions,tree):
-  """Finds closest unpaired ")" bracket on the right of position and appends to subtree everything from this bracket."""
-  pass
- def GetSpecies(subtree):
-  subtree.
+ """Iteratively takes taxons around first species in species.
+ I think that solution would be with re.sub"""
+ pass
+
+def NumberOfUnrootedTrees(n):
+ import math
+ return math.factorial(2*n-5)/(2^(n-3)*math.factorial(n-3))
 
 if __name__ == "__main__":
  args=ParseArgs()
@@ -152,4 +172,21 @@ if __name__ == "__main__":
   print "ERROR: Please, make sure that species are unique."
   sys.exit()
 
- ParseTreeFile(args.input[0])
+ results=ParseTreeFile(args.input[0],args.species)
+ #TODO I really need to get results quickly.
+ #burnin is 0.2 ergo 20%
+ burnin=0.2
+ trees=results["trees"]
+ burn_trees=trees[int(len(trees)*burnin):]
+ translated_species=TranslateSpecies(results["species"],args.species)
+ (num_monophyletic,num_total)=ete2solution(burn_trees,translated_species)
+ print num_monophyletic,num_total
+ print (NumberOfUnrootedTrees(30)-NumberOfUnrootedTrees(29))/NumberOfUnrootedTrees(30)
+
+
+
+
+
+
+
+

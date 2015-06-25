@@ -136,7 +136,10 @@ def ete2solution(trees,translated_species):
   try:
    ete2_tree=ete2.Tree(tree+";")
   except ete2.parser.newick.NewickError:
+   print "INTERNAL ERROR: Problem with turning text into tree with ete2!"
    print tree
+   sys.exit()
+
   try:
    if ete2_tree.check_monophyly(values=translated_species,target_attr="name")[0]:
     monophyletic_counter+1
@@ -155,11 +158,17 @@ def TranslateSpecies(translate_dict,species):
 def IterativeGrouping(tree,species):
  """Iteratively takes taxons around first species in species.
  I think that solution would be with re.sub"""
- pass
+ pass #TODO
 
 def NumberOfUnrootedTrees(n):
  import math
  return math.factorial(2*n-5)/(2^(n-3)*math.factorial(n-3))
+
+def BayesFactor(num_monophyletic,num_total,num_taxa,num_species):
+ posterior=num_monophyletic/num_total
+ prior=NumberOfUnrootedTrees(num_taxa-num_species+1)/NumberOfUnrootedTrees(num_taxa)
+ bayes_factor=(posterior/(1-posterior))/(prior/(1-prior))
+ print "Prior probability: {0}\nPosterior probability: {1}\nBayes Factor: {2}".format(prior,posterior,bayes_factor)
 
 if __name__ == "__main__":
  args=ParseArgs()
@@ -172,7 +181,7 @@ if __name__ == "__main__":
   print "ERROR: Please, make sure that species are unique."
   sys.exit()
 
- results=ParseTreeFile(args.input[0],args.species)
+ results=ParseTreeFile(args.input[0],args.species) #TODO run for every input file
  #TODO I really need to get results quickly.
  #burnin is 0.2 ergo 20%
  burnin=0.2
@@ -181,9 +190,7 @@ if __name__ == "__main__":
  translated_species=TranslateSpecies(results["species"],args.species)
  (num_monophyletic,num_total)=ete2solution(burn_trees,translated_species)
  print num_monophyletic,num_total
- print (NumberOfUnrootedTrees(30)-NumberOfUnrootedTrees(29))/NumberOfUnrootedTrees(30)
-
-
+ BayesFactor(num_monophyletic,num_total,len(results["species"]),len(translated_species))
 
 
 

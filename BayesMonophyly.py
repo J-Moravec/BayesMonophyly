@@ -130,6 +130,17 @@ def GenerateStringMonophyly(species):
  """Generates string representation of all possible monophyletic trees for given species."""
  pass
 
+def IterativeGrouping(tree,species):
+ """Iteratively takes taxons around first species in species."""
+ def LeftIncrease(positions,subtree,tree):
+  """Finds closest unpaired "(" bracket on the left of position and appends to subtree everything from this bracket to the current position."""
+  pass
+ def RightIncrease(positions,tree):
+  """Finds closest unpaired ")" bracket on the right of position and appends to subtree everything from this bracket."""
+  pass
+ def GetSpecies(subtree):
+  subtree.
+
 if __name__ == "__main__":
  args=ParseArgs()
  #analysis makes sense only for 2 and more species:

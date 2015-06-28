@@ -104,7 +104,7 @@ def ParseTreeFile(treefile,species):
   #get cladogram
   tree=re.sub(":[0-9]+\.?[0-9]*([eE]-[0-9]+)?","",tree)
   trees.append(tree)
- return({"species":translated_taxa,"trees":trees})
+ return(translated_taxa,trees)
 
 def CheckSpeciesEquivalency(list_of_dicts):
  if len(list_of_dicts)==0:
@@ -116,13 +116,15 @@ def CheckSpeciesEquivalency(list_of_dicts):
  else:
   #test every other dict against first dict:
   template_dict=list_of_dicts[0]
-  template_dict_items=list_of_dicts[0].items().sort()
+  template_dict_items=list_of_dicts[0].items()
+  template_dict_items.sort()
   for num,matched_dict in enumerate(list_of_dicts[1:]):
    if len(template_dict)!=len(matched_dict):
     print "ERROR: Number of taxa in file 1 and file {0} is different!".format(num+2)
     sys.exit()
    
-   matched_dict_items=matched_dict.items().sort()
+   matched_dict_items=matched_dict.items()
+   matched_dict_items.sort()
    for template,matched in zip(template_dict_items,matched_dict_items):
     if template!=matched:
      print "ERROR: Number or taxa name differs in file 1 {1} and file {0} {2}! They are probably not equivalent!".format(num+2,str(template),str(matched))
@@ -168,7 +170,7 @@ def BayesFactor(num_monophyletic,num_total,num_taxa,num_species):
  posterior=num_monophyletic/num_total
  prior=NumberOfUnrootedTrees(num_taxa-num_species+1)/NumberOfUnrootedTrees(num_taxa)
  bayes_factor=(posterior/(1-posterior))/(prior/(1-prior))
- print "Prior probability: {0}\nPosterior probability: {1}\nBayes Factor: {2}".format(prior,posterior,bayes_factor)
+ return(prior, posterior, bayes_factor)
 
 if __name__ == "__main__":
  args=ParseArgs()
@@ -181,17 +183,27 @@ if __name__ == "__main__":
   print "ERROR: Please, make sure that species are unique."
   sys.exit()
 
- results=ParseTreeFile(args.input[0],args.species) #TODO run for every input file
- #TODO I really need to get results quickly.
- #burnin is 0.2 ergo 20%
- burnin=0.2
- trees=results["trees"]
- burn_trees=trees[int(len(trees)*burnin):]
- translated_species=TranslateSpecies(results["species"],args.species)
- (num_monophyletic,num_total)=ete2solution(burn_trees,translated_species)
- print num_monophyletic,num_total
- BayesFactor(num_monophyletic,num_total,len(results["species"]),len(translated_species))
+ #read all input files
+ all_translated_taxa=[]
+ all_trees=[]
+ for input_file in args.input:
+  (translated_taxa,trees)=ParseTreeFile(input_file,args.species)
+  all_translated_taxa.append(translated_taxa)
+  all_trees.append(trees)
 
+ CheckSpeciesEquivalency(all_translated_taxa)
+ #if equivalent, every file has same species, can use the first one
+ #apply burnin
+ all_trees_burned=[trees[int(len(trees)*args.burnin):] for trees in all_trees]
+ translated_species=TranslateSpecies(all_translated_taxa[0],args.species)
+ summed_burned_trees=[inner for outer in all_trees_burned for inner in outer]
+ (num_monophyletic,num_total)=ete2solution(summed_burned_trees,translated_species)
+ #print num_monophyletic,num_total
+ (prior,posterior,bayes_factor)=BayesFactor(num_monophyletic,num_total,len(all_translated_taxa[0]),len(translated_species))
+ #output:
+ all_trees_num=sum([len(item) for item in all_trees])
+ print """Total trees read: {0}\nTrees after burnin: {1}\nNumber of monophyletic trees: {2}
+Prior: {3}\nPosterior: {4}\nBayes factor: {5}""".format(all_trees_num,len(summed_burned_trees),num_monophyletic,prior,posterior,bayes_factor)
 
 
 

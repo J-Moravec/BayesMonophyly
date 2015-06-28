@@ -21,5 +21,5 @@ Have also on mind that your hypotheses have to make sense with respect to your s
 [2]: http://sysbio.oxfordjournals.org/content/early/2013/06/14/sysbio.syt029.full "Bergsten at al. 2013: Bayesian Tests of Topology Hypotheses with an Example from Diving Beetles"
 
 TODO:
-* Implement more correct Bayes Factor
+* Implement more correct Bayes Factor, such as Bayes titration.
 * Implement non-ete2 solution for testing monophyly

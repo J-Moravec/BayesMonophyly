@@ -16,8 +16,9 @@ Note however that [Suchard et al. 2005][1] consider this approach naive as it do
 
 Have also on mind that your hypotheses have to make sense with respect to your sample. You can not test monophyly of H<sup>1</sup>: group A and sequence X against H<sup>0</sup>: group A; when you have general sample where group A does not have to by monophyletic, will produce incorrect results. I think this is obvious but [Bergsten at al. 2013][2] were able to write whole paper on it.
 
-[1] http://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00352.x/pdf "Suchard at al. 2005: Models for Estimating Bayes Factors with Applications to Phylogeny and Tests of Monophyly"
-[2] http://sysbio.oxfordjournals.org/content/early/2013/06/14/sysbio.syt029.full "Bergsten at al. 2013: Bayesian Tests of Topology Hypotheses with an Example from Diving Beetles"
+[1]: http://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00352.x/pdf "Suchard at al. 2005: Models for Estimating Bayes Factors with Applications to Phylogeny and Tests of Monophyly"
+
+[2]: http://sysbio.oxfordjournals.org/content/early/2013/06/14/sysbio.syt029.full "Bergsten at al. 2013: Bayesian Tests of Topology Hypotheses with an Example from Diving Beetles"
 TODO:
 Implement more correct Bayes Factor
 Implement non-ete2 solution for testing monophyly

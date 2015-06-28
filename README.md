@@ -19,6 +19,7 @@ Have also on mind that your hypotheses have to make sense with respect to your s
 [1]: http://onlinelibrary.wiley.com/doi/10.1111/j.1541-0420.2005.00352.x/pdf "Suchard at al. 2005: Models for Estimating Bayes Factors with Applications to Phylogeny and Tests of Monophyly"
 
 [2]: http://sysbio.oxfordjournals.org/content/early/2013/06/14/sysbio.syt029.full "Bergsten at al. 2013: Bayesian Tests of Topology Hypotheses with an Example from Diving Beetles"
+
 TODO:
-Implement more correct Bayes Factor
-Implement non-ete2 solution for testing monophyly
+*Implement more correct Bayes Factor
+*Implement non-ete2 solution for testing monophyly

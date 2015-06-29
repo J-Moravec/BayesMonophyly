@@ -16,6 +16,7 @@ Note however that [Suchard et al. 2005][1] consider this approach naive as it do
 
 Have also on mind that your hypotheses have to make sense with respect to your sample. You can not test:
 > **H<sub>1</sub>**: group A and sequence X are monophyletic
+
 against:
 > **H<sub>0</sub>**: groupA is monophyletic
 

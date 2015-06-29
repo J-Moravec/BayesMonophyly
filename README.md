@@ -15,6 +15,7 @@ This means that we can look at trees and count those which contain monophyly of 
 Note however that [Suchard et al. 2005][1] consider this approach naive as it does not correctly estimate (or take into account) error rate. For now, only simple Bayes factor (equation 2 from this work) is implemented. For this reason, take results of this script as preliminary results and test your hypothesis directly by running MrBayes (or similar software) with Stepping Stone sampling and with topology restricted to monophyly and another run with topology restricted to non-monophyly. Comparing these SS-obtained likelihoods will be much more accurate.
 
 Have also on mind that your hypotheses have to make sense with respect to your sample. You can not test:
+
   **H<sub>1</sub>**: group A and sequence X are monophyletic
 
 against:

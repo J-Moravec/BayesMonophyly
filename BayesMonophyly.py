@@ -30,7 +30,7 @@ def parse_tree_file(treefile,species):
   sys.exit()
  else:
   with tree_file:
-   tree_file_text=FILE.readlines()
+   tree_file_text=tree_file.readlines()
  #Various checks:
  #first line must be #NEXUS
  if(tree_file_text[0].strip("\n\t ").lower()!="#nexus"):
@@ -141,7 +141,7 @@ def ete2solution(trees,translated_species):
 
   try:
    if ete2_tree.check_monophyly(values=translated_species,target_attr="name")[0]:
-    monophyletic_counter+1
+    monophyletic_counter+=1
   except ValueError:
    print "INTERNAL ERROR: Species are not in tree. Error in translating?"
    print translated_species

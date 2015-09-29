@@ -144,7 +144,7 @@ def parse_tree_file(treefile):
         #TODO better matching is required
         #in my file, I am currently matching only [&rate=number]
         if "[" in tree:
-            tree = re.sub("\[&rate=[0-9]*\.?[0-9]*([eE]-[0-9]+)?\]", "", tree)
+            tree = re.sub("\[&\w+=[0-9]*\.?[0-9]*([eE]-[0-9]+)?\]", "", tree)
         #get cladogram
         tree = re.sub(":[0-9]+\.?[0-9]*([eE]-[0-9]+)?", "", tree)
         trees.append(tree)
@@ -247,15 +247,18 @@ def ete2solution(trees, translated_species):
             raise RuntimeError("Species are not in tree. Error in translating?")
     return(monophyletic_counter)
 
+
 def translate_species(translate_dict, species):
     """Translate input species to numbers as they appear in tree file."""
     reversed_dict = {value : key for key,value in translate_dict.iteritems()}
     translated_species = [str(reversed_dict[item]) for item in species]
     return(translated_species)
 
+
 def non_ete2solution(tree, species):
     """ I think that solution would be with re.sub"""
     pass #TODO
+
 
 def n_unrooted_trees(n):
     """Returns number of unrooted trees for n taxa."""
@@ -307,6 +310,7 @@ def compute_posterior(num_monophyletic, num_total):
     if posterior == 1:
         raise ValueError("Posterior is one")
     return(posterior)
+
 
 if __name__ == "__main__":
     args=parse_args()

@@ -374,11 +374,11 @@ if __name__ == "__main__":
     print output
     if bayes_factor==0:
         print("Probability of this by chance alone given prior: {0:.4{1}}"
-              .format((1-prior)**all_trees_burned_num, number_format)
+              .format((1-prior)**all_trees_burned_num, number_format))
+
     if expected_monophyletic == 0:
         print("Tree sample is too small for specified monophyly to occur at random!")
 
-             )
 
 
 

@@ -348,14 +348,19 @@ if __name__ == "__main__":
     all_trees_burned_num = len(all_trees_burned)
     all_trees_num = sum([len(item) for item in all_trees])
     expected_monophyletic = int(round(prior*all_trees_burned_num))
+    if(prior > 0.0001 and posterior > 0.0001 and bayes_factor > 0.0001):
+        number_format = "f"
+    else:
+        number_format = "e"
+
     output=("Total trees read: {0}\n"
             "Trees after burnin: {1}\n"
             "Monophyletic trees found: {5}\n"
             "Monophyletic trees expected: {3}\n"
             "(in the case of noninformative data)\n\n"
-            "Prior: {2:.4f}\n"
-            "Posterior: {4:.4f}\n"
-            "Bayes factor: {6:.4f}\n"
+            "Prior: {2:.4{7}}\n"
+            "Posterior: {4:.4{7}}\n"
+            "Bayes factor: {6:.4{7}}\n"
             ).format(
                     all_trees_num,
                     all_trees_burned_num,
@@ -363,12 +368,16 @@ if __name__ == "__main__":
                     expected_monophyletic,
                     float(posterior),
                     num_monophyletic,
-                    bayes_factor
+                    bayes_factor,
+                    number_format
                     )
     print output
     if bayes_factor==0:
-        print("Probability of this by chance alone given prior: {0:.2e}"
-              .format((1-prior)**all_trees_burned_num)
+        print("Probability of this by chance alone given prior: {0:.4{1}}"
+              .format((1-prior)**all_trees_burned_num, number_format)
+    if expected_monophyletic == 0:
+        print("Tree sample is too small for specified monophyly to occur at random!")
+
              )
 
 

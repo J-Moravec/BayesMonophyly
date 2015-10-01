@@ -31,3 +31,7 @@ when you have general sample where group A does not have to by monophyletic. Thi
 TODO:
 * Implement more correct Bayes Factor, such as Bayes titration.
 * Implement non-ete2 solution for testing monophyly
+
+# PosteriorTopology
+This script takes newick file and search in bayesian posterior tree sample from MrBayes or BEAST for trees with the same topology. It outputs number of trees in posterior tree sample, number of trees with the same topology and posterior probability of that specific topology ( trees_found/total_trees ).
+
